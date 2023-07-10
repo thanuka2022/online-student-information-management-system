@@ -1,0 +1,54 @@
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.form-control-navbar {
+    height: 20px;
+    width: 200px;
+}
+
+.frame-with-margin {
+    margin: 20px;
+}
+
+.form-frame {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.custom-modal {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.table-frame {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 20px 0;
+    padding: 20px;
+}
+
+.table td, .table th {
+    border: 1px solid #dee2e6;
+}
+
+.table thead th {
+    border-top: none;
+}
+
+.main-footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+}

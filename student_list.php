@@ -167,9 +167,41 @@ $conn->close();
 <html>
 <head>
     <title>Student List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Include CSS and Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/student_list.css">
+    <style>
+        @media (max-width: 767px) {
+            /* Adjust navbar */
+            .navbar-brand {
+                margin-right: 0;
+            }
+
+            .form-control-navbar {
+                width: 100%;
+            }
+
+            .navbar-toggler {
+                margin-right: 0;
+            }
+
+            /* Adjust table */
+            .table-frame {
+                overflow-x: auto;
+            }
+
+            /* Adjust modal */
+            .modal-dialog {
+                max-width: 90%;
+            }
+
+            /* Adjust buttons */
+            .text-right .btn {
+                margin-top: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -240,13 +272,13 @@ $conn->close();
                         <input type="date" class="form-control" name="searchRegisteredDateFrom">
                     </div>
                     <div class="col-md-3 mb-2">
-                        <label for="searchRegisteredDateTo" class="form-label">Registered Date To:</label>
-                        <input type="date" class="form-control" name="searchRegisteredDateTo">
+                        <label for="searchRegisteredDateTo" class="form-label ml-3">Registered Date To:</label>
+                        <input type="date" class="form-control ml-3" name="searchRegisteredDateTo">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 mt-3 text-right">
-                        <button type="submit" class="btn btn-primary ml-3" name="searchBtn">Search</button>
+                        <button type="submit" class="btn btn-primary ml-5" name="searchBtn">Search</button>
                         <button type="submit" class="btn btn-secondary ml-2" name="resetBtn">Reset</button>
                     </div>
                 </div>
@@ -260,7 +292,7 @@ $conn->close();
                     <th>Student No</th>
                     <th>Name</th>
                     <th>Gender</th>
-                    <th>Actions</th>
+                    <th style="vertical-align: middle; text-align: center;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -270,9 +302,11 @@ $conn->close();
                         <td><?php echo $student['name_with_initial']; ?></td>
                         <td><?php echo $student['gender']; ?></td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#viewModal<?php echo $student['student_id']; ?>">View</button>
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal<?php echo $student['student_id']; ?>">Update</button>
-                            <a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $student['student_id']; ?>)">Delete</a>
+                            <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center">
+                                <button type="button" class="btn btn-primary btn-sm mb-2 mb-sm-0 mr-sm-2" data-toggle="modal" data-target="#viewModal<?php echo $student['student_id']; ?>">View</button>
+                                <button type="button" class="btn btn-warning btn-sm mb-2 mb-sm-0 mr-sm-2" data-toggle="modal" data-target="#updateModal<?php echo $student['student_id']; ?>">Update</button>
+                                <a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $student['student_id']; ?>)">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -303,43 +337,41 @@ $conn->close();
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-4 text-center">
-                            <img src="uploads/<?php echo $student['photo']; ?>" alt="Student Image" class="img-fluid mb-3">
+                        <div class="col-md-4 text-center mb-3">
+                            <img src="uploads/<?php echo $student['photo']; ?>" alt="Student Image" class="img-fluid">
                         </div>
                         <div class="col-md-8">
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Student No:</strong></div>
-                                <div class="col-md-8"><?php echo $student['student_id']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Student No:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['student_id']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Name:</strong></div>
-                                <div class="col-md-8"><?php echo $student['name_with_initial']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Name:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['name_with_initial']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Date Of Birth :</strong></div>
-                                <div class="col-md-8"><?php echo $student['date_of_birth']; ?></div>
-                                <!-- <div class="col-md-8"><?php echo calculateAge($student['date_of_birth']); ?></div> -->
-                                
+                                <div class="col-6 col-sm-4 text-right"><strong>Date Of Birth:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['date_of_birth']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Gender:</strong></div>
-                                <div class="col-md-8"><?php echo $student['gender']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Gender:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['gender']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Guardian's Name:</strong></div>
-                                <div class="col-md-8"><?php echo $student['guardian_name']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Guardian's Name:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['guardian_name']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Contact No:</strong></div>
-                                <div class="col-md-8"><?php echo $student['contact_no']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Contact No:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['contact_no']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Guardian's Address:</strong></div>
-                                <div class="col-md-8"><?php echo $student['guardian_address']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Guardian's Address:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['guardian_address']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Relationship:</strong></div>
-                                <div class="col-md-8"><?php echo $student['relation']; ?></div>
+                                <div class="col-6 col-sm-4 text-right"><strong>Relationship:</strong></div>
+                                <div class="col-6 col-sm-8"><?php echo $student['relation']; ?></div>
                             </div>
                         </div>
                     </div>

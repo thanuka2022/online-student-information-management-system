@@ -105,6 +105,7 @@ $conn->close();
 <head>
     <title>Teacher's Profile</title>
     <!-- Include CSS and Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .logo {
@@ -167,6 +168,7 @@ $conn->close();
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php">Home</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="add_student.php">Add Student</a>
                 </li>
@@ -199,7 +201,6 @@ $conn->close();
                     </div>
                 </div>
             </div>
-
             <div class="col-md-8">
                 <div class="frame-with-margin">
                     <div class="form-frame">
@@ -209,19 +210,19 @@ $conn->close();
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" >
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
                                     </div>
                                     <div class="form-group">
                                         <label for="subject">Subject</label>
-                                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter your subject" >
+                                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter your subject">
                                     </div>
                                     <div class="form-group">
                                         <label for="experience">Experience</label>
-                                        <input type="text" class="form-control" id="experience" name="experience" placeholder="Enter your experience" >
+                                        <input type="text" class="form-control" id="experience" name="experience" placeholder="Enter your experience">
                                     </div>
                                     <div class="form-group">
                                         <label for="telephone">Telephone</label>
-                                        <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="Enter your telephone number" >
+                                        <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="Enter your telephone number">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

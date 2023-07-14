@@ -84,6 +84,7 @@ $conn->close();
 <html>
 <head>
     <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Include CSS and Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
@@ -165,14 +166,14 @@ $conn->close();
     </nav>
 
     <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>Welcome to OSIMS</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Welcome to OSIMS</h2>
+            </div>
+            <div class="col-md-6 text-right">
+                <h4>Hi <?php echo $teacherName; ?> !</h4>
+            </div>
         </div>
-        <div class="col-md-6 text-right">
-            <h4>Hi <?php echo $teacherName; ?> !</h4>
-        </div>
-    </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
@@ -188,7 +189,7 @@ $conn->close();
                 <div class="card">
                     <img src="images/boy.png" class="card-img-top" alt="Card Image">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo  $maleCount; ?></h5>
+                        <h5 class="card-title"><?php echo $maleCount; ?></h5>
                         <p class="card-text">Total Male students</p>
                         <a href="student_list.php" class="btn btn-primary">View More</a>
                     </div>
@@ -214,36 +215,36 @@ $conn->close();
         </footer>
     </div>
     <!-- Include Bootstrap JS and FullCalendar library -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#calendar').fullCalendar({
-            // Add your calendar settings here
-            // For example, you can set the events as an array of objects
-            events: [
-                {
-                    title: 'Event 1',
-                    start: '2023-07-01',
-                    end: '2023-07-03'
-                },
-                {
-                    title: 'Event 2',
-                    start: '2023-07-10',
-                    end: '2023-07-12'
-                },
-                {
-                    title: 'Event 3',
-                    start: '2023-07-15',
-                    end: '2023-07-16'
-                }
-                // Add more events as needed
-            ]
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                // Add your calendar settings here
+                // For example, you can set the events as an array of objects
+                events: [
+                    {
+                        title: 'Event 1',
+                        start: '2023-07-01',
+                        end: '2023-07-03'
+                    },
+                    {
+                        title: 'Event 2',
+                        start: '2023-07-10',
+                        end: '2023-07-12'
+                    },
+                    {
+                        title: 'Event 3',
+                        start: '2023-07-15',
+                        end: '2023-07-16'
+                    }
+                    // Add more events as needed
+                ]
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>

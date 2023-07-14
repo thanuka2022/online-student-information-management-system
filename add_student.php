@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Prepare the INSERT statement for student details
-        $studentQuery = "INSERT INTO 	students (full_name, name_with_initial, permanent_address, date_of_birth, gender, photo, registered_date)
+        $studentQuery = "INSERT INTO students (full_name, name_with_initial, permanent_address, date_of_birth, gender, photo, registered_date)
                          VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         // Prepare the statement
@@ -75,21 +75,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close the database connection
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Add Student</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Include CSS and Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .form-control {
-            max-width: 300px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
+        /* Custom CSS styles */
 
         .form-frame {
             padding: 20px;
@@ -99,39 +94,9 @@ $conn->close();
             margin: 20px;
         }
 
-        .column {
-            float: left;
-            width: 33.33%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
-        h2, h4 {
-            color: #333;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        label {
-            font-weight: bold;
-        }
-        .submit-button {
-            margin-top: -20px;
-            text-align: right;
-        }
-
-        .column:nth-child(2) {
-            margin-top: 80px;
-        }
-        
         .student-details-heading {
-            margin-left: 150px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo {
@@ -139,15 +104,9 @@ $conn->close();
             height: 40px;
         }
 
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-        }
-
         .form-control-navbar {
-        height: 20px;
-        width: 200px;
-
+            height: 20px;
+            width: 200px;
         }
 
         .main-footer {
@@ -155,7 +114,6 @@ $conn->close();
             padding: 20px;
             text-align: center;
         }
-
     </style>
 </head>
 <body>
@@ -192,98 +150,96 @@ $conn->close();
                 <a class="nav-link" href="teachers_profile.php">Teacher's Profile</a>
             </li>
             <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Logout</a>
+                <a class="nav-link" href="logout.php">Logout</a>
             </li>
         </ul>
     </div>
 </nav>
 
-    <div class="container mt-4">
-        <h2>Add Student</h2>
-        <div class="form-frame">
-            <form action="add_student.php" method="POST" enctype="multipart/form-data">
-                <div class="clearfix">
-                    <div class="column">
-                        <h4 class="student-details-heading">Student Details</h4>
-                        <div class="form-group">
-                            <label for="full_name" class="text-primary">Student Full Name:</label>
-                            <input type="text" class="form-control" id="full_name" name="full_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name_initial" class="text-primary">Name with Initial:</label>
-                            <input type="text" class="form-control" id="name_initial" name="name_initial" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="date_of_birth" class="text-primary">Date of Birth:</label>
-                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="photo" class="text-primary">Photo:</label>
-                            <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
-                        </div>
+<div class="container mt-4">
+    <h2 class="text-center">Add Student</h2>
+    <div class="form-frame">
+        <form action="add_student.php" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="student-details-heading">Student Details</h4>
+                    <div class="form-group">
+                        <label for="full_name" class="text-primary">Student Full Name:</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" required>
                     </div>
-                    <div class="column">
-                        <div class="form-group">
-                            <label for="permanent_address" class="text-primary">Permanent Address:</label>
-                            <textarea class="form-control" id="permanent_address" name="permanent_address" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="gender" class="text-primary">Gender:</label>
-                            <select class="form-control" id="gender" name="gender" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="registered_date" class="text-primary">Registered Date:</label>
-                            <input type="date" class="form-control" id="registered_date" name="registered_date" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="name_initial" class="text-primary">Name with Initial:</label>
+                        <input type="text" class="form-control" id="name_initial" name="name_initial" required>
                     </div>
-                    <div class="column">
-                        <h4 class="text-center">Guardian Details</h4>
-                        <div class="form-group">
-                            <label for="guardian_name" class="text-primary">Guardian Name:</label>
-                            <input type="text" class="form-control" id="guardian_name" name="guardian_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="contact_no" class="text-primary">Contact No:</label>
-                            <input type="text" class="form-control" id="contact_no" name="contact_no" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="guardian_address" class="text-primary">Guardian Address:</label>
-                            <textarea class="form-control" id="guardian_address" name="guardian_address" rows="3" required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="relation" class="text-primary">Relation:</label>
-                            <select class="form-control" id="relation" name="relation" required>
-                                <option value="">Select Relation</option>
-                                <option value="Father">Father</option>
-                                <option value="Mother">Mother</option>
-                                <option value="Uncle">Uncle</option>
-                                <option value="Aunt">Aunt</option>
-                                <option value="Grand">Grand</option>
-                            </select>
-                        </div>
-
+                    <div class="form-group">
+                        <label for="date_of_birth" class="text-primary">Date of Birth:</label>
+                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo" class="text-primary">Photo:</label>
+                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
                     </div>
                 </div>
-                <div class="submit-button">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="col-md-4 mt-5">
+                    <div class="form-group">
+                        <label for="permanent_address" class="text-primary">Permanent Address:</label>
+                        <textarea class="form-control" id="permanent_address" name="permanent_address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender" class="text-primary">Gender:</label>
+                        <select class="form-control" id="gender" name="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="registered_date" class="text-primary">Registered Date:</label>
+                        <input type="date" class="form-control" id="registered_date" name="registered_date" required>
+                    </div>
                 </div>
-            </form>
-            
+                <div class="col-md-4">
+                    <h4 class="student-details-heading">Guardian Details</h4>
+                    <div class="form-group">
+                        <label for="guardian_name" class="text-primary">Guardian Name:</label>
+                        <input type="text" class="form-control" id="guardian_name" name="guardian_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact_no" class="text-primary">Contact No:</label>
+                        <input type="text" class="form-control" id="contact_no" name="contact_no" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guardian_address" class="text-primary">Guardian Address:</label>
+                        <textarea class="form-control" id="guardian_address" name="guardian_address" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="relation" class="text-primary">Relation:</label>
+                        <select class="form-control" id="relation" name="relation" required>
+                            <option value="">Select Relation</option>
+                            <option value="Father">Father</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Uncle">Uncle</option>
+                            <option value="Aunt">Aunt</option>
+                            <option value="Grand">Grand</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
-    <div class="main-footer">
-              <strong>Copyright &copy; <script>document.write(new Date().getFullYear());</script> </strong>
-                All rights reserved.
-              </footer>
- </div>
-    
+</div>
 
-    <!-- Include Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="main-footer">
+    <p>&copy; <?php echo date("Y"); ?> All rights reserved.</p>
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

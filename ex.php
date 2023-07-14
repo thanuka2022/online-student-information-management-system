@@ -105,52 +105,6 @@ if (!$result) {
 // Process the retrieved data and populate the table
 $students = $result->fetch_all(MYSQLI_ASSOC);
 
-// Search functionality
-$isSearchSubmitted = false; // Flag to check if the search form was submitted
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchBtn'])) {
-    $isSearchSubmitted = true; // Set the flag to true
-    $searchStudentNo = $_POST['searchStudentNo'];
-    $searchGender = $_POST['searchGender'];
-    $searchRegisteredDateFrom = $_POST['searchRegisteredDateFrom'];
-    $searchRegisteredDateTo = $_POST['searchRegisteredDateTo'];
-
-    // Prepare the search query
-    $searchQuery = "SELECT students.*, guardians.*
-                    FROM students
-                    JOIN guardians ON students.student_id = guardians.student_id";
-
-    // Apply search filters
-    $conditions = array();
-
-    if (!empty($searchStudentNo)) {
-        $conditions[] = "students.student_id = $searchStudentNo";
-    }
-
-    if (!empty($searchGender)) {
-        $conditions[] = "students.gender = '$searchGender'";
-    }
-
-    if (!empty($searchRegisteredDateFrom) && !empty($searchRegisteredDateTo)) {
-        $conditions[] = "students.registered_date BETWEEN '$searchRegisteredDateFrom' AND '$searchRegisteredDateTo'";
-    }
-
-    // Append search conditions to the search query
-    if (!empty($conditions)) {
-        $searchQuery .= " WHERE " . implode(" AND ", $conditions);
-    }
-
-    // Execute the search query
-    $searchResult = $conn->query($searchQuery);
-
-    if (!$searchResult) {
-        echo "Error retrieving search results: " . $conn->error;
-    }
-
-    // Process the retrieved data and update the students array
-    $students = $searchResult->fetch_all(MYSQLI_ASSOC);
-}
-
 // Function to calculate age based on date of birth
 function calculateAge($dateOfBirth) {
     $today = new DateTime();
@@ -220,7 +174,7 @@ $conn->close();
     <div class="row">
         <div class="col-md-12 text-right">
             <!-- Add form element and search button -->
-            <form class="form-inline" method="POST">
+            <form class="form-inline" method="POST" id="searchForm">
                 <div class="row">
                     <div class="col-md-3 mb-2">
                         <label for="searchStudentNo" class="form-label">Student No:</label>
@@ -247,13 +201,13 @@ $conn->close();
                 <div class="row">
                     <div class="col-md-12 mt-3 text-right">
                         <button type="submit" class="btn btn-primary ml-3" name="searchBtn">Search</button>
-                        <button type="submit" class="btn btn-secondary ml-2" name="resetBtn">Reset</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="table-frame">
+    <div class="table-frame" id="studentList">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -280,7 +234,7 @@ $conn->close();
         </table>
     </div>
 </div>
-<?php if (isset($updatesApplied) && $updatesApplied && !$isSearchSubmitted && !isset($_POST['resetBtn'])) : ?>
+<?php if (isset($updatesApplied) && $updatesApplied && !isset($_POST['searchBtn']) && !isset($_POST['resetBtn'])) : ?>
         <script>
             if (window.history.replaceState) {
                 window.history.replaceState(null, null, window.location.href);
@@ -330,12 +284,8 @@ $conn->close();
                                 <div class="col-md-8"><?php echo $student['guardian_name']; ?></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-md-4 text-right"><strong>Contact No:</strong></div>
-                                <div class="col-md-8"><?php echo $student['contact_no']; ?></div>
-                            </div>
-                            <div class="row mb-2">
                                 <div class="col-md-4 text-right"><strong>Guardian's Address:</strong></div>
-                                <div class="col-md-8"><?php echo $student['guardian_address']; ?></div>
+                                <div class="col-md-8"><?php echo $student['contact_no']; ?></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-4 text-right"><strong>Relationship:</strong></div>
@@ -474,9 +424,48 @@ $conn->close();
             }
     </script>
 
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+
+        // Get the form data
+        var formData = $(this).serialize();
+
+        // Send the AJAX request
+        $.ajax({
+            type: 'POST',
+            url: 'search.php',
+            data: formData,
+            success: function(response) {
+                // Update the content of the studentList div with the retrieved search results
+                $('#studentList').html(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle the error if the AJAX request fails
+                console.error(error);
+            }
+        });
+    });
+
+    
+});
+
+function resetForm() {
+    // Reset the form fields
+    document.getElementById("searchForm").reset();
+
+    // Refresh the page
+    window.location.reload();
+}
+
+</script>
 
 <!-- Include Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>

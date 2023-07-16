@@ -1,10 +1,12 @@
 <?php
 include_once("config.php");
+session_start();
 
 $errors = []; // Array to store validation errors
 
+$user_id = $_SESSION['userid'];
 // Retrieve existing values from the database
-$query = "SELECT name, subject, experience, telephone_no, photo FROM users WHERE user_id = 1"; // Assuming the teacher's ID is 1
+$query = "SELECT name, subject, experience, telephone_no, photo FROM users WHERE user_id = '$user_id'"; // Assuming the teacher's ID is 1
 $result = $conn->query($query);
 
 if ($result && $result->num_rows > 0) {
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telephone = $_POST['telephone'];
     $email = $_POST['email'];
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $photo = $_FILES['photo']['name'];
 
     // Validate form data
@@ -53,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Proceed if there are no validation errors
     if (empty($errors)) {
         // Prepare the UPDATE statement
-        $updateQuery = "UPDATE users SET username = ?, password = ?, email = ?, name = ?, subject = ?, experience = ?, telephone_no = ?, photo = ? WHERE user_id = 1"; // Assuming the teacher's ID is 1
+        $updateQuery = "UPDATE users SET username = ?, password = ?, email = ?, name = ?, subject = ?, experience = ?, telephone_no = ?, photo = ? WHERE user_id = '$user_id'"; // Assuming the teacher's ID is 1
 
         // Begin the transaction
         $conn->begin_transaction();

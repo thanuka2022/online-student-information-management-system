@@ -1,17 +1,25 @@
 <?php
+include "config.php";
 session_start();
-include_once("config.php");
 
-// Check if the form is submitted
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require('PHPmailer/Exception.php');
+require('PHPmailer/SMTP.php');
+require('PHPmailer/PHPMailer.php');
+
+$errors = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve the submitted data
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirm_password'];
-
-    // Perform basic validation
-    $errors = array();
+    $passwordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $v_code = bin2hex(random_bytes(16));
 
     if (empty($name)) {
         $errors[] = "Name is required.";
@@ -29,31 +37,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Passwords do not match.";
     }
 
-    // Proceed with registration if there are no validation errors
     if (empty($errors)) {
-        // Check if the email already exists in the database
-        $checkQuery = "SELECT * FROM teachers WHERE email = '$email'";
+        $checkQuery = "SELECT * FROM users WHERE email = '$email'";
         $result = $conn->query($checkQuery);
 
-        if ($result && $result->num_rows > 0) {
-            $errors[] = "Email already exists.";
-        } else {
-            // Insert the new teacher record into the database
-            $insertQuery = "INSERT INTO teachers (name, email, password) VALUES ('$name', '$email', '$password')";
-            if ($conn->query($insertQuery)) {
-                $_SESSION['username'] = $email;
-                header('Location: dashboard.php');
-                exit();
+        if ($result) {
+            if ($result->num_rows > 0) {
+                $errors[] = "Email already exists.";
             } else {
-                $errors[] = "Error occurred during registration.";
+                $insertQuery = "INSERT INTO users (username, email, password, v_code, v_user) VALUES ('$name', '$email', '$passwordHash', '$v_code', '0')";
+
+                if (mysqli_query($conn, $insertQuery)) {
+                    // Create a new PHPMailer instance
+                    $mail = new PHPMailer(true);
+
+                    try {
+                        // Server settings
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'mtkdesilva@gmail.com'; // SMTP username
+                        $mail->Password = 'xxwaxiujarxnvfrj'; // SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                        $mail->Port = 465;
+
+                        // Set up email content
+                        $mail->setFrom('mtkdesilva@gmail.com', 'OSIMS');
+                        $mail->addAddress($email);
+                        $mail->Subject = 'Account Verification';
+                        $mail->Body = "Please click the following link to verify your account: <a href='http://localhost/OSIMS/verify.php?email=$email&v_code=$v_code'>
+                            Click Here</a>";
+                        $mail->isHTML(true);
+
+                        // Send the email
+                        $mail->send();
+
+                        echo "<script> alert('Account created - Please Check Verify Your email');</script>";
+                    } catch (Exception $e) {
+                        $errors[] = 'Email could not be sent. Error: ' . $mail->ErrorInfo;
+                    }
+                } else {
+                    $errors[] = "Query failed:1 " . mysqli_error($conn);
+                }
             }
+        } else {
+            $errors[] = "Query failed:2 " . mysqli_error($conn);
         }
     }
 
-    // Close the database connection
+    if (!empty($errors)) {
+        foreach ($errors as $error) {
+            echo "<script> console.log('Error: $error');</script>";
+        }
+    }
     $conn->close();
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html>
@@ -179,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label>Confirm Password</label>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-primary submit-button" value="Register">
+                        <input type="submit" name="register" class="btn btn-primary submit-button" value="Register">
                     </form>
                     <p class="login-link">
                         Already have an account? <a href="index.php">Login here</a>

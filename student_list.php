@@ -1,5 +1,6 @@
 <?php
 include("config.php");
+session_start();
 
 // Begin the transaction
 $conn->begin_transaction();
@@ -90,10 +91,13 @@ try {
     echo "Error: " . $e->getMessage();
 }
 
+$user_id=$_SESSION['userid'];
+
 // Retrieve student details from the database
 $query = "SELECT students.*, guardians.*
           FROM students
-          JOIN guardians ON students.student_id = guardians.student_id";
+          JOIN guardians ON students.student_id = guardians.student_id
+          WHERE students.user_id = '$user_id'";
 
 // Retrieve all students by default
 $result = $conn->query($query);

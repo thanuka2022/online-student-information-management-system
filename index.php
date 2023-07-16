@@ -6,7 +6,7 @@ include_once("config.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the submitted username and password
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
     // Perform basic validation
     $errors = array();
@@ -26,20 +26,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             // Check if the username and password exist in the database
-            $checkQuery = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+            $checkQuery = "SELECT * FROM users WHERE username = '$username'";
             $result = $conn->query($checkQuery);
 
             if ($result && $result->num_rows > 0) {
-                // Valid username and password, set the user session and commit the transaction
-                $_SESSION['username'] = $username;
-                $conn->commit();
-                header('Location: dashboard.php');
-                exit();
+                $user = $result->fetch_assoc();
+                $hashedPassword = $user['password'];
+
+                if (password_verify($_POST['password'], $hashedPassword)) {
+                    // Valid username and password, set the user session and commit the transaction
+                    $_SESSION['username'] = $username;
+                    $_SESSION['userid'] = $user['user_id'];
+                    $conn->commit();
+                    header('Location: dashboard.php');
+                    exit();
+                } else {
+                    // Invalid username or password, rollback the transaction and show an error message
+                    $conn->rollback();
+                    $errors[] = "Invalid username or password.";
+                }
             } else {
                 // Invalid username or password, rollback the transaction and show an error message
                 $conn->rollback();
                 $errors[] = "Invalid username or password.";
             }
+
         } catch (Exception $e) {
             // Error occurred, rollback the transaction and handle the error
             $conn->rollback();

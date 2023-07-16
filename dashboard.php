@@ -1,13 +1,15 @@
 <?php
 include_once("config.php");
+session_start();
 
 // Begin the transaction
 $conn->begin_transaction();
 
 try {
 
+    $user_id=$_SESSION['userid'];
     // Get the count of all students
-    $totalCountQuery = "SELECT COUNT(*) as total_count FROM students";
+    $totalCountQuery = "SELECT COUNT(*) as total_count FROM students WHERE user_id = '$user_id'";
     $totalCountResult = $conn->query($totalCountQuery);
 
     // Check if the query was successful
@@ -22,7 +24,7 @@ try {
     }
 
     // Get the count of male students
-    $maleCountQuery = "SELECT COUNT(*) as male_count FROM students WHERE gender = 'Male'";
+    $maleCountQuery = "SELECT COUNT(*) as male_count FROM students WHERE gender = 'Male' && user_id = '$user_id'";
     $maleResult = $conn->query($maleCountQuery);
 
     // Check if the query was successful
@@ -37,7 +39,7 @@ try {
     }
 
     // Get the count of female students
-    $femaleCountQuery = "SELECT COUNT(*) as female_count FROM students WHERE gender = 'Female'";
+    $femaleCountQuery = "SELECT COUNT(*) as female_count FROM students WHERE gender = 'Female' && user_id = '$user_id'";
     $femaleResult = $conn->query($femaleCountQuery);
 
     // Check if the query was successful
@@ -52,7 +54,7 @@ try {
     }
 
     // Get the teacher name
-    $teacherNameQuery = "SELECT name FROM users WHERE user_id = '1'";
+    $teacherNameQuery = "SELECT name FROM users WHERE user_id = '$user_id'";
     $teacherResult = $conn->query($teacherNameQuery);
 
     // Check if the query was successful

@@ -1,5 +1,6 @@
 <?php
 include_once("config.php");
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
@@ -14,21 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contact_no = $_POST['contact_no'];
     $guardian_address = $_POST['guardian_address'];
     $relation = $_POST['relation'];
-
+    $user_id = $_SESSION['userid'];
     // Begin the transaction
     $conn->begin_transaction();
 
     try {
         // Prepare the INSERT statement for student details
-        $studentQuery = "INSERT INTO students (full_name, name_with_initial, permanent_address, date_of_birth, gender, photo, registered_date)
-                         VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $studentQuery = "INSERT INTO students (full_name, name_with_initial, permanent_address, date_of_birth, gender, photo, registered_date ,user_id)
+                         VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
 
         // Prepare the statement
         $studentStmt = $conn->prepare($studentQuery);
         if (!$studentStmt) {
             throw new Exception($conn->error);
         }
-        $studentStmt->bind_param("sssssss", $full_name, $name_initial, $permanent_address, $date_of_birth, $gender, $photo, $registered_date);
+        $studentStmt->bind_param("ssssssss", $full_name, $name_initial, $permanent_address, $date_of_birth, $gender, $photo, $registered_date, $user_id);
 
         // Execute the statement
         $studentStmt->execute();
